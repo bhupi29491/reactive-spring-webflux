@@ -144,13 +144,60 @@ public class MoviesInfoControllerUnitTest {
 
         //when
         when(movieInfoServiceMock.deleteMovieInfo(isA(String.class))).thenReturn(Mono.empty());
-        
+
         //then
         webTestClient.delete()
                      .uri(MOVIES_INFO_URI + "/{id}", movieInfoId)
                      .exchange()
                      .expectStatus()
                      .isNoContent();
+    }
+
+    @Test
+    void addMovieInfo_Validation() {
+        //given  Thor: Love and Thunder
+        MovieInfo movieInfo = new MovieInfo(null, "", -2022, List.of(""), LocalDate.parse("2022-07-06"));
+
+
+        //then
+        webTestClient.post()
+                     .uri(MOVIES_INFO_URI)
+                     .bodyValue(movieInfo)
+                     .exchange()
+                     .expectStatus()
+                     .isBadRequest()
+                     .expectBody(String.class)
+                     .consumeWith(stringEntityExchangeResult -> {
+                         String responseBody = stringEntityExchangeResult.getResponseBody();
+                         System.out.println("responseBody : " + responseBody);
+                         String expectedErrorMsg = "movieInfo.cast must be present,movieInfo.name must be present,movieInfo.year must be a Positive value";
+                         assert responseBody != null;
+                         assertEquals(expectedErrorMsg, responseBody);
+                     });
+    }
+
+    @Test
+    void updateMovieInfo_Validation() {
+        //given
+        String movieInfoId = "abc";
+        MovieInfo movieInfo = new MovieInfo(null, "", -2022, List.of(""), LocalDate.parse("2022-07-06"));
+
+
+        //then
+        webTestClient.put()
+                     .uri(MOVIES_INFO_URI + "/{id}", movieInfoId)
+                     .bodyValue(movieInfo)
+                     .exchange()
+                     .expectStatus()
+                     .isBadRequest()
+                     .expectBody(String.class)
+                     .consumeWith(stringEntityExchangeResult -> {
+                         String responseBody = stringEntityExchangeResult.getResponseBody();
+                         System.out.println("responseBody : " + responseBody);
+                         String expectedErrorMsg = "movieInfo.cast must be present,movieInfo.name must be present,movieInfo.year must be a Positive value";
+                         assert responseBody != null;
+                         assertEquals(expectedErrorMsg, responseBody);
+                     });
     }
 
 }
