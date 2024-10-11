@@ -155,4 +155,34 @@ class MoviesInfoControllerIntegrationTest {
                      .expectStatus()
                      .isNoContent();
     }
+
+    @Test
+    void updateMovieInfo_NotFound() {
+        //given
+        String movieInfoId = "def";
+        MovieInfo movieInfo = new MovieInfo(null, "Thor: Love and Thunder", 2022,
+                List.of("Christian Bale", "Natalie Portman"), LocalDate.parse("2022-07-06"));
+
+        //when
+        webTestClient.put()
+                     .uri(MOVIES_INFO_URI + "/{id}", movieInfoId)
+                     .bodyValue(movieInfo)
+                     .exchange()
+                     .expectStatus()
+                     .isNotFound();
+    }
+
+    @Test
+    void getMovieInfoByID_NotFound() {
+        //given
+        String movieInfoId = "def";
+
+        //when
+        webTestClient.get()
+                     .uri(MOVIES_INFO_URI + "/{id}", movieInfoId)
+                     .exchange()
+                     .expectStatus()
+                     .isNotFound();
+
+    }
 }
