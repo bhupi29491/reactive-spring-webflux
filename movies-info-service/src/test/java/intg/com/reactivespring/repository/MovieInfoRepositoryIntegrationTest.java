@@ -27,12 +27,13 @@ class MovieInfoRepositoryIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        List<MovieInfo> movieInfos = List.of(new MovieInfo(null, "Batman Begins",
-                        2005, List.of("Christian Bale", "Michael Cane"), LocalDate.parse("2005-06-15")),
-                new MovieInfo(null, "The Dark Knight",
-                        2008, List.of("Christian Bale", "HeathLedger"), LocalDate.parse("2008-07-18")),
-                new MovieInfo("abc", "Dark Knight Rises",
-                        2012, List.of("Christian Bale", "Tom Hardy"), LocalDate.parse("2012-07-20")));
+        List<MovieInfo> movieInfos = List.of(
+                new MovieInfo(null, "Batman Begins", 2005, List.of("Christian Bale", "Michael Cane"),
+                        LocalDate.parse("2005-06-15")),
+                new MovieInfo(null, "The Dark Knight", 2008, List.of("Christian Bale", "HeathLedger"),
+                        LocalDate.parse("2008-07-18")),
+                new MovieInfo("abc", "Dark Knight Rises", 2012, List.of("Christian Bale", "Tom Hardy"),
+                        LocalDate.parse("2012-07-20")));
 
         movieInfoRepository.saveAll(movieInfos)
                            .blockLast();
@@ -78,8 +79,8 @@ class MovieInfoRepositoryIntegrationTest {
     @Test
     public void saveMovieInfo() {
         // given
-        MovieInfo movieInfo = new MovieInfo(null, "Thor: Love and Thunder",
-                2022, List.of("Christian Bale", "Natalie Portman"), LocalDate.parse("2022-07-06"));
+        MovieInfo movieInfo = new MovieInfo(null, "Thor: Love and Thunder", 2022,
+                List.of("Christian Bale", "Natalie Portman"), LocalDate.parse("2022-07-06"));
         // when
         Mono<MovieInfo> moviesInfoMono = movieInfoRepository.save(movieInfo)
                                                             .log();
@@ -128,6 +129,34 @@ class MovieInfoRepositoryIntegrationTest {
         // then
         StepVerifier.create(moviesInfoFlux)
                     .expectNextCount(2)
+                    .verifyComplete();
+    }
+
+    @Test
+    public void findByYear() {
+        // given
+
+        // when
+        Flux<MovieInfo> moviesInfoFlux = movieInfoRepository.findByYear(2005)
+                                                            .log();
+
+        // then
+        StepVerifier.create(moviesInfoFlux)
+                    .expectNextCount(1)
+                    .verifyComplete();
+    }
+
+    @Test
+    public void findByName() {
+        // given
+
+        // when
+        Flux<MovieInfo> moviesInfoFlux = movieInfoRepository.findByName("The Dark Knight")
+                                                            .log();
+
+        // then
+        StepVerifier.create(moviesInfoFlux)
+                    .expectNextCount(1)
                     .verifyComplete();
     }
 
