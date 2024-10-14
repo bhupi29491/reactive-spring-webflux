@@ -1,0 +1,217 @@
+{
+  "info": {
+    "name": "Movie Info API",
+    "_postman_id": "12345-67890-abcde-fghij",
+    "description": "Collection for Movie Info API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "POST - CREATE MOVIE INFO",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"movieInfoId\":1, \"name\": \"Batman Begins\", \"year\":2005, \"cast\":[\"Christian Bale\", \"Michael Cane\"], \"release_date\": \"2005-06-15\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/movieinfos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "movieinfos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST - CREATE MOVIE INFO 2",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"movieInfoId\":2, \"name\": \"The Dark Knight\", \"year\":2008, \"cast\":[\"Christian Bale\", \"Heath Ledger\"], \"release_date\": \"2008-07-18\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/movieinfos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "movieinfos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST - CREATE MOVIE INFO 3",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"movieInfoId\":null, \"name\": \"Dark Knight Rises\", \"year\":2012, \"cast\":[\"Christian Bale\", \"Tom Hardy\"], \"release_date\": \"2012-07-20\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/movieinfos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "movieinfos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET - ALL MOVIE INFO",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/v1/movieinfos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "movieinfos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET - MOVIE INFO BY ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/v1/movieinfos/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "movieinfos",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET - MOVIE INFO STREAM",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/v1/movieinfos/stream",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "movieinfos",
+            "stream"
+          ]
+        }
+      }
+    },
+    {
+      "name": "PUT - UPDATE MOVIE INFO",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"movieInfoId\":1, \"name\": \"Batman Begins\", \"year\":2005, \"cast\":[\"Christian Bale\", \"Michael Cane\", \"Liam Neeson\"], \"release_date\": \"2005-06-15\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/movieinfos/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "movieinfos",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "DELETE - MOVIE INFO",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:8080/v1/movieinfos/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "movieinfos",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET - MOVIE INFO STREAM",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/v1/movieinfos/stream",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "movieinfos",
+            "stream"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "info": {
+    "name": "Review API Collection",
+    "_postman_id": "67890-abcde-fghij-12345",
+    "description": "Collection for Review API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "POST - Create Review 1",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"reviewId\":1, \"movieInfoId\":1, \"comment\": \"Excellent Movie\", \"rating\":8.0}"
+        },
+        "url": {
+          "raw": "http://localhost:8081/v1/reviews",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "v1",
+            "reviews"
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST - Create Review 2",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"reviewId\":2, \"movieInfoId\":2, \"comment\": \"Excellent Movie\", \"rating\":8.0}"
+        },
+        "url": {
+          "raw": "http://localhost:8081/v1/reviews",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "v1",
+            "reviews"
+          ]
+        }
+      }
+    },
+    {
+      "name": "POST - Create Review 3",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"reviewId\":null, \"movieInfoId\":1, \"comment\": \"Awesome Movie\", \"rating\":9.0}"
+        },
+        "url": {
+          "raw": "http://localhost:8081/v1/reviews",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "v1",
+            "reviews"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET - All Reviews",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8081/v1/reviews",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "v1",
+            "reviews"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET - Reviews By MovieInfoId 1",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8081/v1/reviews?movieInfoId=1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "v1",
+            "reviews"
+          ],
+          "query": [
+            {
+              "key": "movieInfoId",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET - Reviews By MovieInfoId 2",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8081/v1/reviews?movieInfoId=2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "v1",
+            "reviews"
+          ],
+          "query": [
+            {
+              "key": "movieInfoId",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "GET - All Reviews Stream",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8081/v1/reviews/stream",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "v1",
+            "reviews",
+            "stream"
+          ]
+        }
+      }
+    },
+    {
+      "name": "PUT - Update Review",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"reviewId\":1, \"movieInfoId\":1, \"comment\": \"Excellent Movie Update\", \"rating\":8.5}"
+        },
+        "url": {
+          "raw": "http://localhost:8081/v1/reviews/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "v1",
+            "reviews",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "DELETE - Review 1",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:8081/v1/reviews/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "v1",
+            "reviews",
+            "1"
+          ]
+        }
+      }
+    }
+  ]
+}
