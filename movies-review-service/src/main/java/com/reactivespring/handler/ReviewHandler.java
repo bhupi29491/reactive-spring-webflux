@@ -2,6 +2,7 @@ package com.reactivespring.handler;
 
 import com.reactivespring.domain.Review;
 import com.reactivespring.exception.ReviewDataException;
+import com.reactivespring.exception.ReviewNotFoundException;
 import com.reactivespring.repository.ReviewReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +33,16 @@ public class ReviewHandler {
     }
 
     private static Mono<ServerResponse> buildReviewsResponse(Flux<Review> reviewsFlux) {
-        return ServerResponse
-                .ok()
-                .body(reviewsFlux, Review.class);
+        return ServerResponse.ok()
+                             .body(reviewsFlux, Review.class);
     }
 
     public Mono<ServerResponse> addReview(ServerRequest request) {
 
-        return request
-                .bodyToMono(Review.class)
-                .doOnNext(this::validate)
-                .flatMap(review -> reviewReactiveRepository.save(review))
-                .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue);
+        return request.bodyToMono(Review.class)
+                      .doOnNext(this::validate)
+                      .flatMap(review -> reviewReactiveRepository.save(review))
+                      .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue);
     }
 
     private void validate(Review review) {
@@ -52,11 +51,10 @@ public class ReviewHandler {
         log.info("constraintViolations : {}", constraintViolations);
 
         if (!constraintViolations.isEmpty()) {
-            String errorMessage = constraintViolations
-                    .stream()
-                    .map(ConstraintViolation::getMessage)
-                    .sorted()
-                    .collect(Collectors.joining(","));
+            String errorMessage = constraintViolations.stream()
+                                                      .map(ConstraintViolation::getMessage)
+                                                      .sorted()
+                                                      .collect(Collectors.joining(","));
             throw new ReviewDataException(errorMessage);
         }
     }
@@ -78,18 +76,20 @@ public class ReviewHandler {
     public Mono<ServerResponse> updateReview(ServerRequest request) {
 
         String reviewId = request.pathVariable("id");
-        Mono<Review> existingReview = reviewReactiveRepository.findById(reviewId);
-        return existingReview.flatMap(review -> request
-                .bodyToMono(Review.class)
-                .map(reqReview -> {
-                    review.setComment(reqReview.getComment());
-                    review.setRating(reqReview.getRating());
-                    return review;
-                })
-                .flatMap(reviewReactiveRepository::save)
-                .flatMap(savedReview -> ServerResponse
-                        .ok()
-                        .bodyValue(savedReview)));
+
+        Mono<Review> existingReview = reviewReactiveRepository.findById(reviewId)
+                                                              .switchIfEmpty(Mono.error(new ReviewNotFoundException(
+                                                                      "Review not found for the given Review id : " + reviewId)));
+
+        return existingReview.flatMap(review -> request.bodyToMono(Review.class)
+                                                       .map(reqReview -> {
+                                                           review.setComment(reqReview.getComment());
+                                                           review.setRating(reqReview.getRating());
+                                                           return review;
+                                                       })
+                                                       .flatMap(reviewReactiveRepository::save)
+                                                       .flatMap(savedReview -> ServerResponse.ok()
+                                                                                             .bodyValue(savedReview)));
     }
 
     public Mono<ServerResponse> deleteReview(ServerRequest request) {
@@ -97,11 +97,9 @@ public class ReviewHandler {
         String reviewId = request.pathVariable("id");
         Mono<Review> existingReview = reviewReactiveRepository.findById(reviewId);
 
-        return existingReview
-                .flatMap(review -> reviewReactiveRepository.deleteById(reviewId))
-                .then(ServerResponse
-                              .noContent()
-                              .build());
+        return existingReview.flatMap(review -> reviewReactiveRepository.deleteById(reviewId))
+                             .then(ServerResponse.noContent()
+                                                 .build());
 
     }
 }
