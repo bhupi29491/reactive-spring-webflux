@@ -1,6 +1,7 @@
 package com.reactivespring.routes;
 
 import com.reactivespring.domain.Review;
+import com.reactivespring.exceptionhandler.GlobalErrorHandler;
 import com.reactivespring.handler.ReviewHandler;
 import com.reactivespring.repository.ReviewReactiveRepository;
 import com.reactivespring.router.ReviewRouter;
@@ -22,7 +23,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 
 @WebFluxTest
-@ContextConfiguration(classes = {ReviewRouter.class, ReviewHandler.class})
+@ContextConfiguration(classes = {ReviewRouter.class, ReviewHandler.class, GlobalErrorHandler.class})
 @AutoConfigureWebTestClient
 public class ReviewsUnitTest {
 
@@ -46,19 +47,42 @@ public class ReviewsUnitTest {
                                                                                                    9.0)));
 
         // then
-        webTestClient
-                .post()
-                .uri(REVIEWS_URI)
-                .bodyValue(awesomeMovie)
-                .exchange()
-                .expectStatus()
-                .isCreated()
-                .expectBody(Review.class)
-                .consumeWith(reviewEntityExchangeResult -> {
-                    Review savedReview = reviewEntityExchangeResult.getResponseBody();
-                    assert savedReview != null;
-                    assert savedReview.getReviewId() != null;
-                });
+        webTestClient.post()
+                     .uri(REVIEWS_URI)
+                     .bodyValue(awesomeMovie)
+                     .exchange()
+                     .expectStatus()
+                     .isCreated()
+                     .expectBody(Review.class)
+                     .consumeWith(reviewEntityExchangeResult -> {
+                         Review savedReview = reviewEntityExchangeResult.getResponseBody();
+                         assert savedReview != null;
+                         assert savedReview.getReviewId() != null;
+                     });
+    }
+
+    @Test
+    public void addReview_Validation() {
+
+        // given
+        Review awesomeMovie = new Review(null, null, "Awesome Movie", -9.0);
+
+        // when
+        when(reviewReactiveRepositoryMock.save(isA(Review.class))).thenReturn(Mono.just(new Review("abc",
+                                                                                                   1L,
+                                                                                                   "Awesome Movie",
+                                                                                                   9.0)));
+
+        // then
+        webTestClient.post()
+                     .uri(REVIEWS_URI)
+                     .bodyValue(awesomeMovie)
+                     .exchange()
+                     .expectStatus()
+                     .isBadRequest()
+                     .expectBody(String.class)
+                     .isEqualTo(
+                             "rating.movieInfoId : must not be null,rating.negative : rating is negative and please pass a non-negative value");
     }
 
     @Test
@@ -73,14 +97,13 @@ public class ReviewsUnitTest {
         when(reviewReactiveRepositoryMock.findAll()).thenReturn(Flux.fromIterable(reviewsList));
 
         // then
-        webTestClient
-                .get()
-                .uri(REVIEWS_URI)
-                .exchange()
-                .expectStatus()
-                .is2xxSuccessful()
-                .expectBodyList(Review.class)
-                .hasSize(3);
+        webTestClient.get()
+                     .uri(REVIEWS_URI)
+                     .exchange()
+                     .expectStatus()
+                     .is2xxSuccessful()
+                     .expectBodyList(Review.class)
+                     .hasSize(3);
 
     }
 
@@ -103,21 +126,20 @@ public class ReviewsUnitTest {
                                                                                                        9.0)));
 
 
-        webTestClient
-                .put()
-                .uri(REVIEWS_URI + "/{id}", "abc")
-                .bodyValue(reviewUpdate)
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody(Review.class)
-                .consumeWith(reviewEntityExchangeResult -> {
-                    Review updatedReview = reviewEntityExchangeResult.getResponseBody();
-                    assert updatedReview != null;
-                    System.out.println("updatedReview : " + updatedReview);
-                    assertEquals(8.0, updatedReview.getRating());
-                    assertEquals("Not an  Awesome Movie", updatedReview.getComment());
-                });
+        webTestClient.put()
+                     .uri(REVIEWS_URI + "/{id}", "abc")
+                     .bodyValue(reviewUpdate)
+                     .exchange()
+                     .expectStatus()
+                     .isOk()
+                     .expectBody(Review.class)
+                     .consumeWith(reviewEntityExchangeResult -> {
+                         Review updatedReview = reviewEntityExchangeResult.getResponseBody();
+                         assert updatedReview != null;
+                         System.out.println("updatedReview : " + updatedReview);
+                         assertEquals(8.0, updatedReview.getRating());
+                         assertEquals("Not an  Awesome Movie", updatedReview.getComment());
+                     });
 
     }
 
@@ -138,12 +160,11 @@ public class ReviewsUnitTest {
 
 
         // then
-        webTestClient
-                .delete()
-                .uri(REVIEWS_URI + "/{id}", "abc")
-                .exchange()
-                .expectStatus()
-                .isNoContent();
+        webTestClient.delete()
+                     .uri(REVIEWS_URI + "/{id}", "abc")
+                     .exchange()
+                     .expectStatus()
+                     .isNoContent();
     }
 
 
