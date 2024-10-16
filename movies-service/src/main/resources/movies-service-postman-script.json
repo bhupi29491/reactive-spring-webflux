@@ -1,0 +1,130 @@
+{
+  "info": {
+    "name": "Movie Info and Reviews",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "POST - CREATE MOVIE INFO",
+      "item": [
+        {
+          "name": "Create Batman Begins Movie Info",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"movieInfoId\":1, \"name\": \"Batman Begins\", \"year\":2005, \"cast\":[\"Christian Bale\", \"Michael Cane\"], \"release_date\": \"2005-06-15\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/v1/movieinfos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "movieinfos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create The Dark Knight Movie Info",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"movieInfoId\":2, \"name\": \"The Dark Knight\", \"year\":2008, \"cast\":[\"Christian Bale\", \"HeathLedger\"], \"release_date\": \"2008-07-18\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/v1/movieinfos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "movieinfos"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - REVIEW",
+      "item": [
+        {
+          "name": "Create Review for Batman Begins - Awesome Movie",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reviewId\":1, \"movieInfoId\":1, \"comment\": \"Awesome Movie\", \"rating\":9.0}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/v1/reviews",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "v1",
+                "reviews"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Review for Batman Begins - Excellent Movie",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"reviewId\":2, \"movieInfoId\":1, \"comment\": \"Excellent Movie\", \"rating\":8.0}"
+            },
+            "url": {
+              "raw": "http://localhost:8081/v1/reviews",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "v1",
+                "reviews"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
