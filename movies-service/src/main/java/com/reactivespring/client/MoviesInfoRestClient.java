@@ -52,7 +52,7 @@ public class MoviesInfoRestClient {
                                                    .value());
                             return clientResponse.bodyToMono(String.class)
                                                  .flatMap(responseMessage -> Mono.error(new MoviesInfoServerException(
-                                                         "Server Exception in MoviesInfoService" + responseMessage)));
+                                                         "Server Exception in MoviesInfoService " + responseMessage)));
                         })
                         .bodyToMono(MovieInfo.class)
                         .log();

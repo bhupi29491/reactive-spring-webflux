@@ -56,7 +56,7 @@ public class ReviewsRestClient {
                                                    .value());
                             return clientResponse.bodyToMono(String.class)
                                                  .flatMap(responseMessage -> Mono.error(new ReviewsServerException(
-                                                         "Server Exception in ReviewsService" + responseMessage)));
+                                                         "Server Exception in ReviewsService " + responseMessage)));
                         })
                         .bodyToFlux(Review.class);
     }
