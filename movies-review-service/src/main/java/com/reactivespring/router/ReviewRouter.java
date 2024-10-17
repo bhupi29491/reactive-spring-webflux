@@ -15,18 +15,16 @@ public class ReviewRouter {
     @Bean
     public RouterFunction<ServerResponse> reviewsRoute(ReviewHandler reviewHandler) {
 
-        return route()
-                .nest(path("/v1/reviews"), builder -> {
-                    builder
-                            .POST("", request -> reviewHandler.addReview(request))
-                            .GET("", request -> reviewHandler.getReviews(request))
-                            .PUT("/{id}", request -> reviewHandler.updateReview(request))
-                            .DELETE("/{id}", request -> reviewHandler.deleteReview(request));
-                })
-                .GET("/v1/hello-world",
-                     (request -> ServerResponse
-                             .ok()
-                             .bodyValue("hello-world")))
+        return route().nest(path("/v1/reviews"), builder -> {
+                          builder.POST("", request -> reviewHandler.addReview(request))
+                                 .GET("", request -> reviewHandler.getReviews(request))
+                                 .PUT("/{id}", request -> reviewHandler.updateReview(request))
+                                 .DELETE("/{id}", request -> reviewHandler.deleteReview(request))
+                                 .GET("/stream", request -> reviewHandler.getReviewStream(request));
+                      })
+                      .GET("/v1/hello-world",
+                           (request -> ServerResponse.ok()
+                                                     .bodyValue("hello-world")))
 /*                .POST("/v1/reviews", request -> reviewHandler.addReview(request))
                 .GET("/v1/reviews", request -> reviewHandler.getReviews(request))*/.build();
     }

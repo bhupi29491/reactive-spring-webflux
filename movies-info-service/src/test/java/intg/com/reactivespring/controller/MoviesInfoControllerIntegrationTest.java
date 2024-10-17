@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.test.StepVerifier;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -32,13 +34,21 @@ class MoviesInfoControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        List<MovieInfo> movieInfos = List.of(
-                new MovieInfo(null, "Batman Begins", 2005, List.of("Christian Bale", "Michael Cane"),
-                        LocalDate.parse("2005-06-15")),
-                new MovieInfo(null, "The Dark Knight", 2008, List.of("Christian Bale", "HeathLedger"),
-                        LocalDate.parse("2008-07-18")),
-                new MovieInfo("abc", "Dark Knight Rises", 2012, List.of("Christian Bale", "Tom Hardy"),
-                        LocalDate.parse("2012-07-20")));
+        List<MovieInfo> movieInfos = List.of(new MovieInfo(null,
+                                                           "Batman Begins",
+                                                           2005,
+                                                           List.of("Christian Bale", "Michael Cane"),
+                                                           LocalDate.parse("2005-06-15")),
+                                             new MovieInfo(null,
+                                                           "The Dark Knight",
+                                                           2008,
+                                                           List.of("Christian Bale", "HeathLedger"),
+                                                           LocalDate.parse("2008-07-18")),
+                                             new MovieInfo("abc",
+                                                           "Dark Knight Rises",
+                                                           2012,
+                                                           List.of("Christian Bale", "Tom Hardy"),
+                                                           LocalDate.parse("2012-07-20")));
 
         movieInfoRepository.saveAll(movieInfos)
                            .blockLast();
@@ -53,8 +63,11 @@ class MoviesInfoControllerIntegrationTest {
     @Test
     void addMovieInfo() {
         //given
-        MovieInfo movieInfo = new MovieInfo(null, "Thor: Love and Thunder", 2022,
-                List.of("Christian Bale", "Natalie Portman"), LocalDate.parse("2022-07-06"));
+        MovieInfo movieInfo = new MovieInfo(null,
+                                            "Thor: Love and Thunder",
+                                            2022,
+                                            List.of("Christian Bale", "Natalie Portman"),
+                                            LocalDate.parse("2022-07-06"));
 
         //when
         webTestClient.post()
@@ -70,6 +83,45 @@ class MoviesInfoControllerIntegrationTest {
                          assert savedMovieInfo.getMovieInfoId() != null;
                      });
 
+    }
+
+    @Test
+    void getAllMovieInfos_Stream() {
+
+        MovieInfo movieInfo = new MovieInfo(null,
+                                            "Thor: Love and Thunder",
+                                            2022,
+                                            List.of("Christian Bale", "Natalie Portman"),
+                                            LocalDate.parse("2022-07-06"));
+
+        //when
+        webTestClient.post()
+                     .uri(MOVIES_INFO_URI)
+                     .bodyValue(movieInfo)
+                     .exchange()
+                     .expectStatus()
+                     .isCreated()
+                     .expectBody(MovieInfo.class)
+                     .consumeWith(movieInfoEntityExchangeResult -> {
+                         MovieInfo savedMovieInfo = movieInfoEntityExchangeResult.getResponseBody();
+                         assert savedMovieInfo != null;
+                         assert savedMovieInfo.getMovieInfoId() != null;
+                     });
+
+        //when
+        Flux<MovieInfo> movieStreamFlux = webTestClient.get()
+                                                       .uri(MOVIES_INFO_URI + "/stream")
+                                                       .exchange()
+                                                       .expectStatus()
+                                                       .is2xxSuccessful()
+                                                       .returnResult(MovieInfo.class)
+                                                       .getResponseBody();
+        StepVerifier.create(movieStreamFlux)
+                    .assertNext(movieInfo1 -> {
+                        assert movieInfo1.getMovieInfoId() != null;
+                    })
+                    .thenCancel()
+                    .verify();
     }
 
     @Test
@@ -161,8 +213,11 @@ class MoviesInfoControllerIntegrationTest {
     void updateMovieInfo() {
         //given
         String movieInfoId = "abc";
-        MovieInfo movieInfo = new MovieInfo(null, "Thor: Love and Thunder", 2022,
-                List.of("Christian Bale", "Natalie Portman"), LocalDate.parse("2022-07-06"));
+        MovieInfo movieInfo = new MovieInfo(null,
+                                            "Thor: Love and Thunder",
+                                            2022,
+                                            List.of("Christian Bale", "Natalie Portman"),
+                                            LocalDate.parse("2022-07-06"));
 
         //when
         webTestClient.put()
@@ -198,8 +253,11 @@ class MoviesInfoControllerIntegrationTest {
     void updateMovieInfo_NotFound() {
         //given
         String movieInfoId = "def";
-        MovieInfo movieInfo = new MovieInfo(null, "Thor: Love and Thunder", 2022,
-                List.of("Christian Bale", "Natalie Portman"), LocalDate.parse("2022-07-06"));
+        MovieInfo movieInfo = new MovieInfo(null,
+                                            "Thor: Love and Thunder",
+                                            2022,
+                                            List.of("Christian Bale", "Natalie Portman"),
+                                            LocalDate.parse("2022-07-06"));
 
         //when
         webTestClient.put()
